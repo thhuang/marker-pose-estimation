@@ -9,7 +9,6 @@ namespace mpe {
 
 class PoseEstimation {
  private:
-  float _axis_length;  // Axis length in meter drown on the output image
   float _marker_size;  // Marker actual size in meter
   cv::Mat _intrinsic_matrix;  // Camera intrinsic matrix
   cv::Mat _distortion_coeff;  // Camera distortion coefficient

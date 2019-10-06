@@ -1,0 +1,15 @@
+%YAML:1.0
+num_markers: 9
+marker_size_pixel: 189
+marker_size_meter: 0.05
+camera_intrinsic:
+  fx: 3.4670968597818287e+03
+  fy: 3.4670968597818287e+03
+  cx: 2016
+  cy: 1512
+distortion_coeff:
+  k1: -7.6732037665501282e-02
+  k2: -8.8342039729904920e-01
+  p1: 0
+  p2: 0
+  k3: 1.7384145834167930e+00

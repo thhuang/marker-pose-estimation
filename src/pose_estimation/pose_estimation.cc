@@ -4,17 +4,25 @@
 #include <experimental/filesystem>
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
 #include <Eigen/Geometry>
 #include "mpe/pose_estimation/pose_estimation.h"
 #include "mpe/pose_estimation/marker_pose.h"
 #include "mpe/utils/marker_detector.h"
 #include "mpe/utils/path_loader.h"
+
 using namespace std;
 using namespace std::experimental::filesystem;
 using namespace cv;
 using namespace cv::aruco;
 using namespace mpe;
 using namespace Eigen;
+
+AngleAxisd rvec_cv_to_eigen(Vec3d);
+
+void draw_cube(cv::InputOutputArray, int ,cv::InputArray, 
+                       cv::InputArray, cv::InputArray, cv::InputArray, float);
 
 PoseEstimation::PoseEstimation() 
  : fs{"/output/estimation.yml", FileStorage::WRITE} {
@@ -32,7 +40,6 @@ void PoseEstimation::_help(const string images_dir) {
 void PoseEstimation::_read_config() {
   cout << "\nReading parameters from input/config.yml" << endl;
   cv::FileStorage fs("/input/config.yml", cv::FileStorage::READ);
-  _axis_length = fs["axis_length"];
   _marker_size = fs["marker_size_meter"];
   _intrinsic_matrix = (Mat_<double>(3, 3) << 
     fs["camera_intrinsic"]["fx"],                            0, fs["camera_intrinsic"]["cx"], 
@@ -43,17 +50,15 @@ void PoseEstimation::_read_config() {
                                             fs["distortion_coeff"]["p1"], 
                                             fs["distortion_coeff"]["p2"], 
                                             fs["distortion_coeff"]["k3"]);
-  cout << "\nAxis length: " << _axis_length << endl;
   cout << "\nMarker size in meter: " << _marker_size << endl;
   cout << "\nCamera intrinsic matrix: \n" << _intrinsic_matrix << endl;
   cout << "\nCamera distortion coefficient \n" << _distortion_coeff << endl;
 }
 
 void PoseEstimation::_draw() {
-  drawDetectedMarkers(_image_out, _corners, _ids);
   for (int i = 0; i < _ids.size(); i++) {
-    drawAxis(_image_out, _intrinsic_matrix, _distortion_coeff, 
-              _rotation[i], _translation[i], _axis_length);
+    draw_cube(_image_out, _ids[i], _intrinsic_matrix, _distortion_coeff, 
+                      _rotation[i], _translation[i], _marker_size);
   }
 }
 
@@ -64,9 +69,7 @@ void PoseEstimation::_output(const string output_path) {
   // Output pose
   map<int, MarkerPose> results;
   for (int i = 0; i < _ids.size(); ++i) {
-    Vector3d rotation(_rotation[i][0], _rotation[i][1], _rotation[i][2]);
-    double theta = rotation.norm();
-    Quaterniond q(AngleAxisd(theta, rotation / theta));
+    Quaterniond q(rvec_cv_to_eigen(_rotation[i]));
     stringstream ss;
     ss << "  Marker " << _ids[i] << '\n';
     ss << "    translation (x, y, z) = (";
@@ -115,6 +118,7 @@ void PoseEstimation::_estimate_pose(const string image_path, const string output
     // Estimate pose
     estimatePoseSingleMarkers(_corners, _marker_size, _intrinsic_matrix, 
                               _distortion_coeff, _rotation, _translation);
+
     // Draw axes for each detected marker
     _draw();
   }
@@ -160,4 +164,63 @@ int main(int argc, char* argv[]) {
   PoseEstimation().estimate(images_dir);
 
   return 0;
+}
+
+AngleAxisd rvec_cv_to_eigen(Vec3d rvec_cv) {
+  Vector3d rotation(rvec_cv[0], rvec_cv[1], rvec_cv[2]);
+  double theta = rotation.norm();
+  return AngleAxisd(theta, rotation / theta);
+}
+
+void draw_cube(InputOutputArray image, int index,
+                       InputArray intrinsic_matrix, InputArray distortion_coeff, 
+                       InputArray rotation, InputArray translation, 
+                       float cube_size) {
+    float half = cube_size / 2;
+
+    // Get cube edge points
+    std::vector<cv::Point3f> edge_points = {
+      Point3f(-half, -half, 0),
+      Point3f( half, -half, 0),
+      Point3f( half,  half, 0),
+      Point3f(-half,  half, 0),
+      Point3f(-half, -half, cube_size),
+      Point3f( half, -half, cube_size),
+      Point3f( half,  half, cube_size),
+      Point3f(-half,  half, cube_size),
+      Point3f(0, 0, 0)
+    };
+
+    // Calculate projected points
+    std::vector<cv::Point2f> edge_point_project;
+    projectPoints(edge_points, rotation, translation, intrinsic_matrix, distortion_coeff, edge_point_project);
+
+    // Add index
+    string text = to_string(index);
+    int font_face = FONT_HERSHEY_SCRIPT_SIMPLEX; 
+    double font_scale = 5;
+    int thickness = 5;
+    int baseline;
+    Size text_size = getTextSize(text, font_face, font_scale, thickness, &baseline);
+    Point origin(edge_point_project[8].x - text_size.width / 2,
+                 edge_point_project[8].y + text_size.height / 2);
+    putText(image, text, origin, font_face, font_scale, Scalar(0, 0, 0), thickness);
+
+    // Draw cube edges lines
+    auto x_color = Scalar(66, 64, 203);
+    auto y_color = Scalar(102, 193, 134);
+    auto z_color = Scalar(223, 169, 46);
+    int line_width = 5;
+    cv::line(image, edge_point_project[0], edge_point_project[1], x_color, line_width);
+    cv::line(image, edge_point_project[1], edge_point_project[2], y_color, line_width);
+    cv::line(image, edge_point_project[2], edge_point_project[3], x_color, line_width);
+    cv::line(image, edge_point_project[3], edge_point_project[0], y_color, line_width);
+    cv::line(image, edge_point_project[0], edge_point_project[4], z_color, line_width);
+    cv::line(image, edge_point_project[1], edge_point_project[5], z_color, line_width);
+    cv::line(image, edge_point_project[2], edge_point_project[6], z_color, line_width);
+    cv::line(image, edge_point_project[3], edge_point_project[7], z_color, line_width);
+    cv::line(image, edge_point_project[4], edge_point_project[5], x_color, line_width);
+    cv::line(image, edge_point_project[5], edge_point_project[6], y_color, line_width);
+    cv::line(image, edge_point_project[6], edge_point_project[7], x_color, line_width);
+    cv::line(image, edge_point_project[7], edge_point_project[4], y_color, line_width);
 }

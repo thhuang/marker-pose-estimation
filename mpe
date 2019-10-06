@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+set -e
+
+command=$1
+shift
+
+compose_base() {
+    set -x
+    docker-compose "$@"
+}
+build() {
+    compose_base build
+}
+compile() {
+    compose_base run marker_pose_estimation compile
+}
+create_markers() {
+    compose_base run marker_pose_estimation execute marker_creation
+}
+estimate() {
+    input_path="$@"
+    file_path="$PWD/$@"
+    if [[ $file_path == *"//"* ]]; then
+        file_path=$input_path
+    fi
+
+    xbase=${file_path##*/}
+    xpref=${xbase%.*}
+    xfext=${xbase##*.}
+    if [ -d "$input_path" ]; then
+        echo "$input_path is a directory"
+        compose_base run -v "$file_path:/input/images" \
+                     marker_pose_estimation execute pose_estimation
+    fi 
+    if [ -f "$input_path" ]; then
+        echo "$input_path is a file"
+        compose_base run -v "$file_path:/input/images/${xbase%.*}.${xfext}" \
+                     marker_pose_estimation execute pose_estimation
+    fi 
+    
+}
+
+case $command in
+    build)
+        build
+        ;;
+    compile)
+        compile
+        ;;
+    create_markers)
+        create_markers
+        ;;
+    estimate)
+        estimate "$@"
+        ;;
+    *)
+        echo "Error: command not found: $command"
+        exit 1
+esac
