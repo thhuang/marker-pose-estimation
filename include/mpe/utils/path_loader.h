@@ -1,0 +1,23 @@
+#ifndef MPE_PATH_LOADER_H_
+#define MPE_PATH_LOADER_H_
+
+#include <opencv2/aruco.hpp>
+#include <opencv2/core/types.hpp>
+#include <string>
+#include <vector>
+
+namespace mpe {
+
+class PathLoader {
+ private:
+  std::string _path;
+  PathLoader();
+
+ public:
+  PathLoader(std::string path) : _path{path} {};
+  std::vector<std::string> load();
+};
+
+}  // namespace mpe
+
+#endif  // MPE_PATH_LOADER_H_
