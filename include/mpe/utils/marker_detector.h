@@ -1,5 +1,5 @@
-#ifndef MPE_MARKER_DETECT_H_
-#define MPE_MARKER_DETECT_H_
+#ifndef MPE_UTILS_MARKER_DETECT_H_
+#define MPE_UTILS_MARKER_DETECT_H_
 
 #include <opencv2/aruco.hpp>
 #include <opencv2/core/types.hpp>
@@ -19,4 +19,4 @@ class MarkerDetector {
 
 }  // namespace mpe
 
-#endif  // MPE_MARKER_DETECT_H_
+#endif  // MPE_UTILS_MARKER_DETECT_H_

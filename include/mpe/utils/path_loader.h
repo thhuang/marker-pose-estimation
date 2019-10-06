@@ -1,5 +1,5 @@
-#ifndef MPE_PATH_LOADER_H_
-#define MPE_PATH_LOADER_H_
+#ifndef MPE_UTILS_PATH_LOADER_H_
+#define MPE_UTILS_PATH_LOADER_H_
 
 #include <opencv2/aruco.hpp>
 #include <opencv2/core/types.hpp>
@@ -20,4 +20,4 @@ class PathLoader {
 
 }  // namespace mpe
 
-#endif  // MPE_PATH_LOADER_H_
+#endif  // MPE_UTILS_PATH_LOADER_H_

@@ -5,6 +5,8 @@
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <Eigen/Geometry>
+#include "mpe/pose_estimation/pose_estimation.h"
+#include "mpe/pose_estimation/marker_pose.h"
 #include "mpe/utils/marker_detector.h"
 #include "mpe/utils/path_loader.h"
 using namespace std;
@@ -13,56 +15,6 @@ using namespace cv;
 using namespace cv::aruco;
 using namespace mpe;
 using namespace Eigen;
-
-class PoseEstimation {
- private:
-  float _axis_length;                     // Axis length in meter drown on the output image
-  float _marker_size;                     // Marker actual size in meter
-  Mat _intrinsic_matrix;                  // Camera intrinsic matrix
-  Mat _distortion_coeff;                  // Camera distortion coefficient
-  Mat _image;                             // Input image
-  Mat _image_out;                         // Output image
-  vector<int> _ids;                       // Detected marker indices
-  vector<vector<Point2f>> _corners;       // Detected marker edges
-  vector<Vec3d> _translation, _rotation;  // Pose parameters
-  FileStorage fs;                         // File storage for estimation output
-  
-  void _help(const string);
-  void _read_config();
-  void _estimate_pose(const string, const string);
-  void _draw();
-  void _output(const string);
-
- public:
-  PoseEstimation();
-  void estimate(string);
-};
-
-struct MarkerPose {
-  double x;
-  double y;
-  double z;
-  double qw;
-  double qx;
-  double qy;
-  double qz;
-  string text;
-  MarkerPose() = default;
-  MarkerPose(Vec3d t, Quaterniond q, string text)
-   : x{t[0]}, y{t[1]}, z{t[2]},
-     qw{q.w()}, qx{q.vec()[0]}, qy{q.vec()[1]}, qz{q.vec()[2]},
-     text{text} {}
-};
-
-int main(int argc, char* argv[]) {
-
-  // Path to the directory containing input images
-  string images_dir = "/input/";
-  images_dir += argc > 1 ? argv[1] : "images";
-  PoseEstimation().estimate(images_dir);
-
-  return 0;
-}
 
 PoseEstimation::PoseEstimation() 
  : fs{"/output/estimation.yml", FileStorage::WRITE} {
@@ -128,22 +80,23 @@ void PoseEstimation::_output(const string output_path) {
     ss << q.vec()[2] << ")" << endl;
     results[_ids[i]] = MarkerPose(_translation[i], q, ss.str());
   }
+  // Output result (sorted according to the index of the marker)
   for (auto result : results) {
     stringstream marker_name;
     marker_name << "marker_" << result.first;
     cout << result.second.text;
     fs << marker_name.str() << "{";
-    fs << "translation" << "{";
-    fs << "x" << result.second.x;
-    fs << "y" << result.second.y;
-    fs << "z" << result.second.z;
-    fs << "}";
-    fs << "rotation" << "{";
-    fs << "w" << result.second.qw;
-    fs << "x" << result.second.qx;
-    fs << "y" << result.second.qy;
-    fs << "z" << result.second.qz;
-    fs << "}";
+    fs <<   "translation" << "{";
+    fs <<     "x" << result.second.x;
+    fs <<     "y" << result.second.y;
+    fs <<     "z" << result.second.z;
+    fs <<   "}";
+    fs <<   "rotation" << "{";
+    fs <<     "w" << result.second.qw;
+    fs <<     "x" << result.second.qx;
+    fs <<     "y" << result.second.qy;
+    fs <<     "z" << result.second.qz;
+    fs <<   "}";
     fs << "}";
   }
 
@@ -199,4 +152,12 @@ void PoseEstimation::estimate(const string images_dir) {
   cout << "Done!" << endl;
 }
 
+int main(int argc, char* argv[]) {
 
+  // Path to the directory containing input images
+  string images_dir = "/input/";
+  images_dir += argc > 1 ? argv[1] : "images";
+  PoseEstimation().estimate(images_dir);
+
+  return 0;
+}

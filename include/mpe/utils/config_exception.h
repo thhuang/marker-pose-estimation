@@ -1,5 +1,5 @@
-#ifndef MPE_CONFIG_EXCEPTION_H_
-#define MPE_CONFIG_EXCEPTION_H_
+#ifndef MPE_UTILS_CONFIG_EXCEPTION_H_
+#define MPE_UTILS_CONFIG_EXCEPTION_H_
 
 #include <exception>
 #include <string>
@@ -23,4 +23,4 @@ struct ConfigException : virtual public std::exception {
 
 }  // namespace mpe
 
-#endif  // MPE_CONFIG_EXCEPTION_H_
+#endif  // MPE_UTILS_CONFIG_EXCEPTION_H_
