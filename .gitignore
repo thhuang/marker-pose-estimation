@@ -4,6 +4,7 @@ output/
 bin/
 lib/
 build/
+third_party/
 .DS_Store
 
 # VS Code

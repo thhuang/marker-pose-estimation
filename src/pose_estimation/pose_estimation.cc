@@ -136,7 +136,7 @@ void PoseEstimation::estimate(const string images_dir) {
   for (auto image_path : path_loader.load()) {
     string filename = path(image_path).filename();
     string output_path = "/output/" + filename;
-    cout << "Processing " << image_path.substr(1)
+    cout << "Processing " << filename
          << " --> " << output_path.substr(1) << endl;
 
     fs << filename.substr(0, filename.find(".")) << "{";
@@ -159,8 +159,7 @@ void PoseEstimation::estimate(const string images_dir) {
 int main(int argc, char* argv[]) {
 
   // Path to the directory containing input images
-  string images_dir = "/input/";
-  images_dir += argc > 1 ? argv[1] : "images";
+  const string images_dir = argc > 1 ? argv[1] : "/input/images";
   PoseEstimation().estimate(images_dir);
 
   return 0;

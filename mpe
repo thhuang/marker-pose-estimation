@@ -27,17 +27,18 @@ estimate() {
     xbase=${file_path##*/}
     xpref=${xbase%.*}
     xfext=${xbase##*.}
-    if [ -d "$input_path" ]; then
+    if [ -z "$input_path" ]; then
+        echo "Empty"
+        compose_base run marker_pose_estimation execute pose_estimation
+    elif [ -d "$input_path" ]; then
         echo "$input_path is a directory"
-        compose_base run -v "$file_path:/input/images" \
-                     marker_pose_estimation execute pose_estimation
-    fi 
-    if [ -f "$input_path" ]; then
+        compose_base run -v "$file_path:/tmp/images" \
+                     marker_pose_estimation execute pose_estimation /tmp/images
+    elif [ -f "$input_path" ]; then
         echo "$input_path is a file"
-        compose_base run -v "$file_path:/input/images/${xbase%.*}.${xfext}" \
-                     marker_pose_estimation execute pose_estimation
-    fi 
-    
+        compose_base run -v "$file_path:/tmp/images/${xbase%.*}.${xfext}" \
+                     marker_pose_estimation execute pose_estimation /tmp/images
+    fi
 }
 
 case $command in
