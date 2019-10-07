@@ -28,7 +28,7 @@ estimate() {
     xpref=${xbase%.*}
     xfext=${xbase##*.}
     if [ -z "$input_path" ]; then
-        echo "Empty"
+        echo Use default input path: input/images
         compose_base run marker_pose_estimation execute pose_estimation
     elif [ -d "$input_path" ]; then
         echo "$input_path is a directory"

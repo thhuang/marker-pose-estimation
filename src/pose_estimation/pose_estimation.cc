@@ -34,7 +34,6 @@ void PoseEstimation::_help(const string images_dir) {
   cout << "This is a marker pose estimation program." << endl;
   cout << "Usage: pose_estimation [images_dir]" << endl
        << "(default: ./images --> The program will process every file in input/images/)\n" << endl;
-  cout << "Input image directory: " << images_dir << '\n' << endl;
 }
 
 void PoseEstimation::_read_config() {
