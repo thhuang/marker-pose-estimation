@@ -118,4 +118,4 @@ Available commands:
         
 ## Issue
 Since the marker pose is estimated separately with only 4 coplanar points, it may have two geometrically feasible solutions, such as the incorrectly calculated pose of the marker in the upper left corner of the figure below. This is a well-known ambiguity when solving [PnP (Perspective-n-Point)](https://en.wikipedia.org/wiki/Perspective-n-Point) problems. The ambiguity may be solved with more accurate detection of the corner of the marker by getting closer to the markers, using bigger markers, using a camera with higher resolution, fine tunning parameters of the corner detection algorithm according to the camera, estimating the pose with multiple marker information, estimating the pose with temporal information, or using other error reducing strategies.
-<img src="./misc/issue.jpg" width="350" />
+![](./misc/issue.jpg)
