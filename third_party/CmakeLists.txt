@@ -1,5 +1,0 @@
-add_executable(camera_calibration opencv_camera_calibration/camera_calibration.cpp)
-
-target_link_libraries(camera_calibration
-  ${THIRD_PARTY_LIBS}
-  )
