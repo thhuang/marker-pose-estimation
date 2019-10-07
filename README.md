@@ -1,7 +1,10 @@
 # MarkerPoseEstimation
 [ArUco marker](http://www.uco.es/investiga/grupos/ava/node/26) 6D pose estimation tool wrapped in [Docker](https://www.docker.com/). This program is based on the [ArUco module](https://github.com/opencv/opencv_contrib/tree/master/modules/aruco) in [OpenCV](https://opencv.org/).
 
-<img src="./samples/mpe.gif"  width="400"/>
+<p float="left">
+  <img src="./misc/mpe01.gif" width="400" />
+  <img src="./misc/mpe02.gif" width="400" /> 
+</p>
 
 ## Preparation
 1. [Install Docker](https://docs.docker.com/install/)
@@ -59,9 +62,22 @@ Base on the [`input/config.yml`](./input/config.yml) file. There will have `num_
   ./mpe create_markers
   ```
 - [Samples](./samples/markers): The actual size of the marker will be 50x50 mm if [the pdf file](./samples/markers/markers_50mm.pdf) is printed with 100% scaling.
+  <p float="left">
+    <img src="./samples/markers/marker_0.png" width="200" />
+    <img src="./samples/markers/marker_1.png" width="200" /> 
+    <img src="./samples/markers/marker_2.png" width="200" /> 
+  </p>
+  <p float="left">
+    <img src="./samples/markers/marker_3.png" width="200" />
+    <img src="./samples/markers/marker_4.png" width="200" /> 
+    <img src="./samples/markers/marker_5.png" width="200" /> 
+  </p>
+  <p float="left">
+    <img src="./samples/markers/marker_6.png" width="200" />
+    <img src="./samples/markers/marker_7.png" width="200" /> 
+    <img src="./samples/markers/marker_8.png" width="200" /> 
+  </p>
 
-  ![](./samples/markers/marker_0.png)  ![](./samples/markers/marker_1.png)  ![](./samples/markers/marker_2.png) ![](./samples/markers/marker_3.png)  ![](./samples/markers/marker_4.png)  ![](./samples/markers/marker_5.png) ![](./samples/markers/marker_6.png)  ![](./samples/markers/marker_7.png)  ![](./samples/markers/marker_8.png)
-  
 ## Estimate the marker pose
 Estimate the pose of markers in the image. As default, The program will read every file in [`input/images`](input/images) directory. Parameters (`marker_size_meter`, `camera_intrinsic`, and `distortion_coeff`) should be given in the [`input/config.yml`](./input/config.yml) file in order to accurately estimate the actual pose of the marker. The program also read a single image or a folder of images with command line. Finally, the output image and the estimation result in `.yml` will be stored in the `output` directory. In the output `estimation.yml`, the translation (in meter) and the rotation (in [quaternion](https://en.wikipedia.org/wiki/Quaternion)) from the camera frame to the frame of the detected markers is recorded. More options will be listed in [next section](https://github.com/thhuang/MarkerPoseEstimation#execute-with-the-mpe-helper-script).
 - [A sample image](./samples/images) for demo is in [`input/images`](./input/images) directory. The corresponding camera parameters is in both [`config.yml`](./input/config.yml) and [`iPhone6s_plus_camera_calibration_photo_live_mode.xml`](samples/iPhone6s_plus_camera_calibration_photo_live_mode.xml), which is the parameters of my iPhone 6s Plus calibrated with [the calibration script](https://github.com/opencv/opencv/blob/master/samples/cpp/tutorial_code/calib3d/camera_calibration/camera_calibration.cpp) from [OpenCV](https://opencv.org/)
@@ -99,3 +115,5 @@ Available commands:
         ./mpe estimate PATH_TO_A_IMAGE
         ./mpe estimate ~/Desktop/input/test.jpg
         ```
+        
+## Issue
