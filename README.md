@@ -93,7 +93,7 @@ Available commands:
         ./mpe estimate PATH_TO_A_DIRECTORY_WITH_IMAGES
         ./mpe estimate ~/Desktop/input
         ```
-    - Estimate a single given image.
+    - Estimate a single image.
       - Examples:
         ```
         ./mpe estimate PATH_TO_A_IMAGE
