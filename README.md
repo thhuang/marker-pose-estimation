@@ -2,8 +2,8 @@
 [ArUco marker](http://www.uco.es/investiga/grupos/ava/node/26) 6D pose estimation tool wrapped in [Docker](https://www.docker.com/). This program is based on the [ArUco module](https://github.com/opencv/opencv_contrib/tree/master/modules/aruco) in [OpenCV](https://opencv.org/).
 
 <p float="left">
-  <img src="./misc/mpe01.gif" width="400" />
-  <img src="./misc/mpe02.gif" width="400" /> 
+  <img src="./misc/mpe01.gif" width="350" />
+  <img src="./misc/mpe02.gif" width="350" /> 
 </p>
 
 ## Preparation
@@ -63,19 +63,19 @@ Base on the [`input/config.yml`](./input/config.yml) file. There will have `num_
   ```
 - [Samples](./samples/markers): The actual size of the marker will be 50x50 mm if [the pdf file](./samples/markers/markers_50mm.pdf) is printed with 100% scaling.
   <p float="left">
-    <img src="./samples/markers/marker_0.png" width="200" />
-    <img src="./samples/markers/marker_1.png" width="200" /> 
-    <img src="./samples/markers/marker_2.png" width="200" /> 
+    <img src="./samples/markers/marker_0.png" width="150" />
+    <img src="./samples/markers/marker_1.png" width="150" /> 
+    <img src="./samples/markers/marker_2.png" width="150" /> 
   </p>
   <p float="left">
-    <img src="./samples/markers/marker_3.png" width="200" />
-    <img src="./samples/markers/marker_4.png" width="200" /> 
-    <img src="./samples/markers/marker_5.png" width="200" /> 
+    <img src="./samples/markers/marker_3.png" width="150" />
+    <img src="./samples/markers/marker_4.png" width="150" /> 
+    <img src="./samples/markers/marker_5.png" width="150" /> 
   </p>
   <p float="left">
-    <img src="./samples/markers/marker_6.png" width="200" />
-    <img src="./samples/markers/marker_7.png" width="200" /> 
-    <img src="./samples/markers/marker_8.png" width="200" /> 
+    <img src="./samples/markers/marker_6.png" width="150" />
+    <img src="./samples/markers/marker_7.png" width="150" /> 
+    <img src="./samples/markers/marker_8.png" width="150" /> 
   </p>
 
 ## Estimate the marker pose
@@ -117,3 +117,5 @@ Available commands:
         ```
         
 ## Issue
+Since the marker pose is estimated separately with only 4 coplanar points, it may have two geometrically feasible solutions, such as the incorrectly calculated pose of the marker in the upper left corner of the figure below. This is a well-known ambiguity when solving [PnP (Perspective-n-Point)](https://en.wikipedia.org/wiki/Perspective-n-Point) problems. The ambiguity may be solved with more accurate detection of the corner of the marker by getting closer to the markers, using bigger markers, using a camera with higher resolution, fine tunning parameters of the corner detection algorithm according to the camera, estimating the pose with multiple marker information, estimating the pose with temporal information, or using other error reducing strategies.
+<img src="./misc/issue.jpg" width="350" />
