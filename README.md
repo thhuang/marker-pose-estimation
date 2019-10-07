@@ -1,6 +1,8 @@
 # MarkerPoseEstimation
 [ArUco marker](http://www.uco.es/investiga/grupos/ava/node/26) 6D pose estimation tool wrapped in [Docker](https://www.docker.com/). This program is based on the [ArUco module](https://github.com/opencv/opencv_contrib/tree/master/modules/aruco) in [OpenCV](https://opencv.org/).
 
+<img src="./samples/mpe.gif"  width="400"/>
+
 ## Preparation
 1. [Install Docker](https://docs.docker.com/install/)
     - [Install Docker Engine - Community on Ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
@@ -11,7 +13,7 @@
 
 2. Build the environment for the tool
     ```bash
-    ./mle build
+    ./mpe build
     ```
 
 3. Compile the marker creation and pose estimation tools
@@ -30,7 +32,7 @@
           - `cx`, `cy`: The optical center expressed in the pixel coordinate.
         - `distortion_coeff`: Five distortion parameters
           - `k1`, `k2`, `p1`, `p2`, `k3`: Distortion parameters.
-        - For more information about the camera intrinsic matrix and distortion coefficients, please refer to the [this page](https://docs.opencv.org/2.4/doc/tutorials/calib3d/camera_calibration/camera_calibration.html).
+        - For more information about the camera intrinsic matrix and the distortion coefficients, please refer to the [this page](https://docs.opencv.org/2.4/doc/tutorials/calib3d/camera_calibration/camera_calibration.html).
     - A [`config.yml`](./samples/config.yml) sample:
         ```yaml
         %YAML:1.0
@@ -60,9 +62,9 @@ Base on the [`input/config.yml`](./input/config.yml) file. There will have `num_
 
   ![](./samples/markers/marker_0.png)  ![](./samples/markers/marker_1.png)  ![](./samples/markers/marker_2.png) ![](./samples/markers/marker_3.png)  ![](./samples/markers/marker_4.png)  ![](./samples/markers/marker_5.png) ![](./samples/markers/marker_6.png)  ![](./samples/markers/marker_7.png)  ![](./samples/markers/marker_8.png)
   
-## Estimate marker poses
-Estimate the pose of markers in the image. As default, The program will read every file in [`input/images`](input/images) directory. Parameters (`marker_size_meter`, `camera_intrinsic`, and `distortion_coeff`) should be given in the [`input/config.yml`](./input/config.yml) file in order to accurately estimate the actual pose of the marker. The program also read a single image or a folder of images with command line. Finally, the output image and the estimation result in `.yml` will be stored in the `output` directory. In the output `estimation.yml`, The translation (in meter) and the rotation (in [quaternion](https://en.wikipedia.org/wiki/Quaternion)) from the camera frame to the frame of the detected markers is recorded. More options will be listed in next section.
-- [A sample image](./samples/images) is in `input/images` directory. The corresponding camera parameters is in both `config.yml`(./input/config.yml) and [`iPhone6s_plus_camera_calibration_photo_live_mode.xml`](samples/iPhone6s_plus_camera_calibration_photo_live_mode.xml), which is the parameters of my iPhone 6s Plus calibrated with [the calibration script](https://github.com/opencv/opencv/blob/master/samples/cpp/tutorial_code/calib3d/camera_calibration/camera_calibration.cpp) from [OpenCV](https://opencv.org/)
+## Estimate the marker pose
+Estimate the pose of markers in the image. As default, The program will read every file in [`input/images`](input/images) directory. Parameters (`marker_size_meter`, `camera_intrinsic`, and `distortion_coeff`) should be given in the [`input/config.yml`](./input/config.yml) file in order to accurately estimate the actual pose of the marker. The program also read a single image or a folder of images with command line. Finally, the output image and the estimation result in `.yml` will be stored in the `output` directory. In the output `estimation.yml`, the translation (in meter) and the rotation (in [quaternion](https://en.wikipedia.org/wiki/Quaternion)) from the camera frame to the frame of the detected markers is recorded. More options will be listed in [next section](https://github.com/thhuang/MarkerPoseEstimation#execute-with-the-mpe-helper-script).
+- [A sample image](./samples/images) for demo is in [`input/images`](./input/images) directory. The corresponding camera parameters is in both [`config.yml`](./input/config.yml) and [`iPhone6s_plus_camera_calibration_photo_live_mode.xml`](samples/iPhone6s_plus_camera_calibration_photo_live_mode.xml), which is the parameters of my iPhone 6s Plus calibrated with [the calibration script](https://github.com/opencv/opencv/blob/master/samples/cpp/tutorial_code/calib3d/camera_calibration/camera_calibration.cpp) from [OpenCV](https://opencv.org/)
 
   <img src="./input/images/nine_markers.jpg"  width="400"/>
 
@@ -70,32 +72,30 @@ Estimate the pose of markers in the image. As default, The program will read eve
 The name `mpe` stands for Marker Pose Estimation. To ease the docker operations and abstract the implementation, a helper script `mpe` is provided. `mpe` script is a handy shortcut to issue docker related commands. The marker creation and pose estimation processes will run in the docker container.
 ### Usage
 ```shell
-dde <command> [arguments]
+./mpe <command> [arguments]
 ```
 Available commands:
 - `build`: Build the environment.
 - `compile`: Compile the marker creation and pose estimation tools.
-- `create_markers`: Create markers.
-  - The markers will be stored in `output` directory.
+- `create_markers`: Literally, create markers.
+  - Markers will be stored in `output` directory.
 - `estimate`: Estimate the pose of markers in the given image.
   - The result, `estimation.yml`, and the output images will be stored in `output` directory.
   - Arguments:
-    - Run with default input path `input/images`(./input/images).
-      - Example:
-        ```bash
+    - Run with default input path [`input/images`](./input/images).
+      - A example:
+        ```
         ./mpe estimate
         ```
     - Estimate every image in a given directory.
       - Examples:
-        ```bash
+        ```
         ./mpe estimate PATH_TO_A_DIRECTORY_WITH_IMAGES
         ./mpe estimate ~/Desktop/input
         ```
     - Estimate a single given image.
       - Examples:
-        ```bash
+        ```
         ./mpe estimate PATH_TO_A_IMAGE
         ./mpe estimate ~/Desktop/input/test.jpg
         ```
-      
-## Issues
