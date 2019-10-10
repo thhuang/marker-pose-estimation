@@ -8,16 +8,16 @@ namespace mpe {
 
 struct ConfigException : virtual public std::exception {
  protected:
-  std::string _error_message;
+  std::string error_message_;
     
  public:
   explicit 
-  ConfigException(const std::string& msg) : _error_message(msg) {}
+  ConfigException(const std::string& msg) : error_message_(msg) {}
 
   virtual ~ConfigException() throw () {}
 
   virtual const char* what() const throw () {
-    return _error_message.c_str();
+    return error_message_.c_str();
   }
 };
 

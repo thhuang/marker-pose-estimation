@@ -10,11 +10,11 @@ namespace mpe {
 
 class PathLoader {
  private:
-  std::string _path;
+  std::string path_;
   PathLoader();
 
  public:
-  PathLoader(std::string path) : _path{path} {};
+  PathLoader(std::string path) : path_{path} {};
   std::vector<std::string> load();
 };
 

@@ -9,7 +9,7 @@ namespace mpe {
 
 class MarkerDetector {
  private:
-  cv::Ptr<cv::aruco::Dictionary> _dictionary;
+  cv::Ptr<cv::aruco::Dictionary> dictionary_;
 
  public:
   MarkerDetector();

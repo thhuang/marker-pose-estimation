@@ -6,7 +6,7 @@ using namespace mpe;
 
 vector<string> PathLoader::load() {
   vector<string> paths;
-  for (const auto & entry : directory_iterator(_path))
+  for (const auto & entry : directory_iterator(path_))
     paths.push_back(entry.path());
   return paths;
 }

@@ -6,13 +6,13 @@ using namespace cv::aruco;
 namespace mpe {
 
 MarkerDetector::MarkerDetector() {
-  _dictionary = getPredefinedDictionary(DICT_6X6_50);
+  dictionary_ = getPredefinedDictionary(DICT_6X6_50);
 }
 
 void MarkerDetector::detect(Mat image, 
                             vector<vector<Point2f>>& corners,
                             vector<int>& ids) {
-  detectMarkers(image, _dictionary, corners, ids);
+  detectMarkers(image, dictionary_, corners, ids);
 }
 
 }  // namespace mpe
