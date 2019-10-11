@@ -18,6 +18,10 @@
     ```bash
     ./mpe build
     ```
+    - If the [opencv-cpp](https://hub.docker.com/r/tzuhsuanhuang/opencv-cpp) docker image cannot be pulled from the Docker Hub. Please use the following command instead.
+        ```bash
+        docker-compose -f docker-compose.yml.build build
+        ```
 
 3. Compile the marker creation and pose estimation tools
     ```bash
