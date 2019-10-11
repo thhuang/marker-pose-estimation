@@ -12,12 +12,6 @@
 #include "mpe/utils/marker_detector.h"
 #include "mpe/utils/path_loader.h"
 #include "mpe/utils/draw_cube.h"
-// using namespace std;
-// using namespace std::experimental::filesystem;
-// using namespace cv;
-// using namespace cv::aruco;
-// using namespace mpe;
-// using namespace Eigen;
 
 mpe::PoseEstimation::PoseEstimation() 
  : fs{"/output/estimation.yml", cv::FileStorage::WRITE} {

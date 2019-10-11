@@ -1,0 +1,10 @@
+version: "3"
+services:
+  marker_pose_estimation:
+    build:
+      context: .
+      dockerfile: Dockerfile.build
+    volumes:
+      - ./input:/input
+      - ./output:/output
+      - .:/app
