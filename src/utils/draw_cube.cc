@@ -34,7 +34,7 @@ void mpe::draw_cube(cv::InputOutputArray image, int index,
   int baseline;
   cv::Size text_size = cv::getTextSize(text, font_face, font_scale, thickness, &baseline);
   cv::Point origin(edge_point_project[8].x - text_size.width / 2,
-                edge_point_project[8].y + text_size.height / 2);
+                   edge_point_project[8].y + text_size.height / 2);
   cv::putText(image, text, origin, font_face, font_scale, cv::Scalar(0, 0, 0), thickness);
 
   // Draw cube edges lines

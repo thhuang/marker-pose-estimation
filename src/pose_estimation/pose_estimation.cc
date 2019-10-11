@@ -127,7 +127,7 @@ void mpe::PoseEstimation::estimate(const std::string images_dir) {
     std::string filename = std::experimental::filesystem::path(image_path).filename();
     std::string output_path = "/output/" + filename;
     std::cout << "Processing " << filename
-         << " --> " << output_path.substr(1) << std::endl;
+              << " --> " << output_path.substr(1) << std::endl;
 
     fs << filename.substr(0, filename.find(".")) << "{";
 
