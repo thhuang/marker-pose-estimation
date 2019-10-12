@@ -103,7 +103,7 @@ Available commands:
   - The result, `estimation.yml`, and the output images will be stored in `output` directory.
   - Arguments:
     - Run with default input path [`input/images`](./input/images).
-      - A example:
+      - An example:
         ```
         ./mpe estimate
         ```
