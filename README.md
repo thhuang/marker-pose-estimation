@@ -13,8 +13,10 @@
     - [Install Docker Desktop on Mac](https://docs.docker.com/docker-for-mac/install/)
     - [Install Docker Desktop on Windows](https://docs.docker.com/docker-for-windows/install/)
     - [Other information](https://docs.docker.com/install/)
+2. [Install Docker Compose](https://docs.docker.com/compose/install/)
+    - Mac users do not need to install Compose separately.
 
-2. Build the environment for the tool
+3. Build the environment for the tool
     ```bash
     ./mpe build
     ```
@@ -23,12 +25,12 @@
         docker-compose -f docker-compose.yml.build build
         ```
 
-3. Compile the marker creation and pose estimation tools
+4. Compile the marker creation and pose estimation tools
     ```bash
     ./mpe compile
     ```
 
-4. Prepare  a `config.yml` file.
+5. Prepare  a `config.yml` file.
     - The `config.yml` file should be placed under [`input`](./input) directory.
     - Parameters
         - `num_markers`: The number of markers you would like to create. The number should be less than 50.
