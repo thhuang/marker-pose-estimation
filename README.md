@@ -1,4 +1,4 @@
-# MarkerPoseEstimation
+# Marker Pose Estimation
 [ArUco marker](http://www.uco.es/investiga/grupos/ava/node/26) 6D pose estimation tool wrapped in [Docker](https://www.docker.com/). This program is based on the [ArUco module](https://github.com/opencv/opencv_contrib/tree/master/modules/aruco) in [OpenCV](https://opencv.org/).
 
 <p float="left">
